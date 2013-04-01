@@ -213,6 +213,7 @@ namespace Aecount
 			ManipulationDelta delta = e.TotalManipulation;
 			Point translation = delta.Translation;
 
+			// FIXME: Replace magic numbers with something sensible.
 			if (translation.X > 50.0)
 			{
 				DecrementCount();
