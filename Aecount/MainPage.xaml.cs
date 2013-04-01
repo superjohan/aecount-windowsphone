@@ -21,6 +21,13 @@ namespace Aecount
 		private string CountKey = "count";
 		private string TitleKey = "title";
 		private string GoalKey = "goal";
+		private double ZeroEpsilon = 0.000001;
+		private double TitleGridHeight;
+		private double GoalGridHeight;
+		private Thickness GoalGridMargin;
+		private TimeSpan AnimationDuration = TimeSpan.FromMilliseconds(200);
+		private TimeSpan FastAnimationDuration = TimeSpan.FromMilliseconds(75);
+		private double CountAnimationX = 30.0;
 
 		private int Count
 		{
@@ -33,6 +40,8 @@ namespace Aecount
 				}
 				catch (Exception ex)
 				{
+					Debug.WriteLine(ex.Message);
+
 					this.Count = 0;
 					return 0;
 				}
@@ -62,10 +71,6 @@ namespace Aecount
 			}
 		}
 
-		private double TitleGridHeight;
-		private double GoalGridHeight;
-		private Thickness GoalGridMargin;
-
 		public MainPage()
 		{
 			InitializeComponent();
@@ -78,13 +83,82 @@ namespace Aecount
 			TitleGridHeight = TitleGrid.ActualHeight;
 			GoalGridHeight = GoalGrid.ActualHeight;
 			GoalGridMargin = GoalGrid.Margin;
+
+			// I fucking *hate* the Windows Phone animation system.
+			CountText.RenderTransform = new TranslateTransform();
+		}
+
+		private void AnimateCountOut(bool leftDirection)
+		{
+			double startX = 0;
+			double endX = leftDirection ? -CountAnimationX : CountAnimationX;
+
+			Storyboard sb = new Storyboard();
+			DoubleAnimation translationAnimation = new DoubleAnimation();
+			translationAnimation.Duration = FastAnimationDuration;
+			translationAnimation.From = startX;
+			translationAnimation.To = endX;
+			DoubleAnimation fadeAnimation = new DoubleAnimation();
+			fadeAnimation.Duration = translationAnimation.Duration;
+			fadeAnimation.From = 1.0;
+			fadeAnimation.To = 0;
+			Storyboard.SetTarget(translationAnimation, CountText);
+			Storyboard.SetTarget(fadeAnimation, CountText);
+			Storyboard.SetTargetProperty(translationAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+			Storyboard.SetTargetProperty(fadeAnimation, new PropertyPath("UIElement.Opacity"));
+			
+			if (leftDirection)
+			{
+				sb.Completed += AnimateCountOut_Left_Completed;
+			}
+			else
+			{
+				sb.Completed += AnimateCountOut_Right_Completed;
+			}
+
+			sb.Children.Add(translationAnimation);
+			sb.Children.Add(fadeAnimation);
+			sb.Begin();
+		}
+
+		private void AnimateCountIn(bool leftDirection)
+		{
+			CountText.Text = Count.ToString();
+
+			double startX = leftDirection ? CountAnimationX : -CountAnimationX;
+			double endX = 0;
+
+			Storyboard sb = new Storyboard();
+			DoubleAnimation translationAnimation = new DoubleAnimation();
+			translationAnimation.Duration = FastAnimationDuration;
+			translationAnimation.From = startX;
+			translationAnimation.To = endX;
+			DoubleAnimation fadeAnimation = new DoubleAnimation();
+			fadeAnimation.Duration = translationAnimation.Duration;
+			fadeAnimation.From = 0;
+			fadeAnimation.To = 1.0;
+			Storyboard.SetTarget(translationAnimation, CountText);
+			Storyboard.SetTarget(fadeAnimation, CountText);
+			Storyboard.SetTargetProperty(translationAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+			Storyboard.SetTargetProperty(fadeAnimation, new PropertyPath("UIElement.Opacity"));
+			sb.Children.Add(translationAnimation);
+			sb.Children.Add(fadeAnimation);
+			sb.Begin();
+		}
+
+		private void AnimateCountOut_Left_Completed(object sender, EventArgs e)
+		{
+			AnimateCountIn(true);
+		}
+
+		private void AnimateCountOut_Right_Completed(object sender, EventArgs e)
+		{
+			AnimateCountIn(false);
 		}
 
 		private void UpdateCountText(bool increment)
 		{
-			// TODO: Animation.
-
-			CountText.Text = Count.ToString();
+			AnimateCountOut(increment);
 		}
 
 		private void DecrementCount()
@@ -138,8 +212,6 @@ namespace Aecount
 			double topY = (1.0 - delta.Scale.Y) * CounterGrid.ActualHeight;
 			return topY;
 		}
-
-		private double ZeroEpsilon = 0.000001;
 
 		private void LayoutRoot_ManipulationDelta(object sender, ManipulationDeltaEventArgs e)
 		{
