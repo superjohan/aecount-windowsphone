@@ -17,7 +17,6 @@ namespace Aecount
 {
 	public partial class MainPage : PhoneApplicationPage
 	{
-		private IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
 		private string CountKey = "count";
 		private string TitleKey = "title";
 		private string GoalKey = "goal";
@@ -33,39 +32,13 @@ namespace Aecount
 		{
 			get
 			{
-				try
-				{
-					int count = (int)settings[CountKey];
-					return count;
-				}
-				catch (Exception ex)
-				{
-					Debug.WriteLine(ex.Message);
-
-					this.Count = 0;
-					return 0;
-				}
+				int count = SettingsHelper.GetIntegerValueForKey(CountKey);
+				return count;
 			}
 
 			set
 			{
-				if (settings.Contains(CountKey))
-				{
-					settings[CountKey] = value;
-				}
-				else
-				{
-					try
-					{
-						settings.Add(CountKey, value);
-					}
-					catch (Exception ex)
-					{
-						Debug.WriteLine("Unable to add count to settings: " + ex.Message);
-					}
-				}
-
-				settings.Save();
+				SettingsHelper.SetValue(CountKey, value);
 			}
 		}
 
@@ -73,40 +46,20 @@ namespace Aecount
 		{
 			get
 			{
-				try
+				string title = (string)SettingsHelper.GetValueForKey(TitleKey);
+				if (title == null)
 				{
-					string title = (string)settings[TitleKey];
-					return title;
-				}
-				catch (Exception ex)
-				{
-					Debug.WriteLine(ex.Message);
-
 					string defaultTitle = "Counter";
-					this.Title = defaultTitle;
+					Title = defaultTitle;
 					return defaultTitle;
 				}
+
+				return title;
 			}
 
 			set
 			{
-				if (settings.Contains(TitleKey))
-				{
-					settings[TitleKey] = value;
-				}
-				else
-				{
-					try
-					{
-						settings.Add(TitleKey, value);
-					}
-					catch (Exception ex)
-					{
-						Debug.WriteLine("Unable to add title to settings: " + ex.Message);
-					}
-				}
-
-				settings.Save();
+				SettingsHelper.SetValue(TitleKey, value);
 			}
 		}
 
@@ -114,40 +67,21 @@ namespace Aecount
 		{
 			get
 			{
-				try
+				int goal = SettingsHelper.GetIntegerValueForKey(GoalKey);
+				if (goal == 0)
 				{
-					int goal = (int)settings[GoalKey];
-					return goal;
-				}
-				catch (Exception ex)
-				{
-					Debug.WriteLine(ex.Message);
-
+					// FIXME: This should be set on first launch, not when the helper returns 0.
 					int defaultGoal = 20;
-					this.Goal = defaultGoal;
+					Goal = defaultGoal;
 					return defaultGoal;
 				}
+
+				return goal;
 			}
 
 			set
 			{
-				if (settings.Contains(GoalKey))
-				{
-					settings[GoalKey] = value;
-				}
-				else
-				{
-					try
-					{
-						settings.Add(GoalKey, value);
-					}
-					catch (Exception ex)
-					{
-						Debug.WriteLine("Unable to add goal to settings: " + ex.Message);
-					}
-				}
-
-				settings.Save();
+				SettingsHelper.SetValue(GoalKey, value);
 			}
 		}
 
