@@ -49,8 +49,6 @@ namespace Aecount
 
 			set
 			{
-				Debug.WriteLine("Setting value to " + value);
-
 				if (settings.Contains(CountKey))
 				{
 					settings[CountKey] = value;
@@ -71,11 +69,95 @@ namespace Aecount
 			}
 		}
 
+		private string Title
+		{
+			get
+			{
+				try
+				{
+					string title = (string)settings[TitleKey];
+					return title;
+				}
+				catch (Exception ex)
+				{
+					Debug.WriteLine(ex.Message);
+
+					string defaultTitle = "Counter";
+					this.Title = defaultTitle;
+					return defaultTitle;
+				}
+			}
+
+			set
+			{
+				if (settings.Contains(TitleKey))
+				{
+					settings[TitleKey] = value;
+				}
+				else
+				{
+					try
+					{
+						settings.Add(TitleKey, value);
+					}
+					catch (Exception ex)
+					{
+						Debug.WriteLine("Unable to add title to settings: " + ex.Message);
+					}
+				}
+
+				settings.Save();
+			}
+		}
+
+		private int Goal
+		{
+			get
+			{
+				try
+				{
+					int goal = (int)settings[GoalKey];
+					return goal;
+				}
+				catch (Exception ex)
+				{
+					Debug.WriteLine(ex.Message);
+
+					int defaultGoal = 20;
+					this.Goal = defaultGoal;
+					return defaultGoal;
+				}
+			}
+
+			set
+			{
+				if (settings.Contains(GoalKey))
+				{
+					settings[GoalKey] = value;
+				}
+				else
+				{
+					try
+					{
+						settings.Add(GoalKey, value);
+					}
+					catch (Exception ex)
+					{
+						Debug.WriteLine("Unable to add goal to settings: " + ex.Message);
+					}
+				}
+
+				settings.Save();
+			}
+		}
+
 		public MainPage()
 		{
 			InitializeComponent();
 
 			CountText.Text = Count.ToString();
+			TitleBox.Text = Title;
+			GoalBox.Text = Goal.ToString();
 		}
 
 		private void PhoneApplicationPage_Loaded_1(object sender, RoutedEventArgs e)
@@ -260,6 +342,26 @@ namespace Aecount
 			else
 			{
 				ResetCounter();
+			}
+		}
+
+		private void TitleBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			Title = TitleBox.Text;
+		}
+
+		private void GoalBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			Goal = Convert.ToInt32(GoalBox.Text);
+		}
+
+		private void GoalBox_KeyUp(object sender, KeyEventArgs e)
+		{
+			TextBox box = (TextBox)sender;
+			if (box.Text.Contains('.'))
+			{
+				box.Text = box.Text.Replace(".", "");
+				box.SelectionStart = box.Text.Length;
 			}
 		}
 	}
