@@ -7,7 +7,8 @@
 
     <!--Application Resources-->
     <Application.Resources>
-    </Application.Resources>
+		<FontFamily x:Key="ChunkFive">Fonts/Chunk.ttf#ChunkFive</FontFamily>
+	</Application.Resources>
 
     <Application.ApplicationLifetimeObjects>
         <!--Required object that handles lifetime events for the application-->
