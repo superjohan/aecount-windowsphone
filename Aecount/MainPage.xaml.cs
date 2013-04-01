@@ -110,18 +110,22 @@ namespace Aecount
 			double endX = leftDirection ? -CountAnimationX : CountAnimationX;
 
 			Storyboard sb = new Storyboard();
+
 			DoubleAnimation translationAnimation = new DoubleAnimation();
 			translationAnimation.Duration = FastAnimationDuration;
 			translationAnimation.From = startX;
 			translationAnimation.To = endX;
+			Storyboard.SetTarget(translationAnimation, CountText);
+			Storyboard.SetTargetProperty(translationAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+			sb.Children.Add(translationAnimation);
+			
 			DoubleAnimation fadeAnimation = new DoubleAnimation();
 			fadeAnimation.Duration = translationAnimation.Duration;
 			fadeAnimation.From = 1.0;
-			fadeAnimation.To = 0;
-			Storyboard.SetTarget(translationAnimation, CountText);
+			fadeAnimation.To = 0;			
 			Storyboard.SetTarget(fadeAnimation, CountText);
-			Storyboard.SetTargetProperty(translationAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
 			Storyboard.SetTargetProperty(fadeAnimation, new PropertyPath("UIElement.Opacity"));
+			sb.Children.Add(fadeAnimation);
 			
 			if (leftDirection)
 			{
@@ -132,8 +136,6 @@ namespace Aecount
 				sb.Completed += AnimateCountOut_Right_Completed;
 			}
 
-			sb.Children.Add(translationAnimation);
-			sb.Children.Add(fadeAnimation);
 			sb.Begin();
 		}
 
@@ -145,20 +147,23 @@ namespace Aecount
 			double endX = 0;
 
 			Storyboard sb = new Storyboard();
+
 			DoubleAnimation translationAnimation = new DoubleAnimation();
 			translationAnimation.Duration = FastAnimationDuration;
 			translationAnimation.From = startX;
 			translationAnimation.To = endX;
+			Storyboard.SetTarget(translationAnimation, CountText);
+			Storyboard.SetTargetProperty(translationAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+			sb.Children.Add(translationAnimation);
+
 			DoubleAnimation fadeAnimation = new DoubleAnimation();
 			fadeAnimation.Duration = translationAnimation.Duration;
 			fadeAnimation.From = 0;
 			fadeAnimation.To = 1.0;
-			Storyboard.SetTarget(translationAnimation, CountText);
 			Storyboard.SetTarget(fadeAnimation, CountText);
-			Storyboard.SetTargetProperty(translationAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
 			Storyboard.SetTargetProperty(fadeAnimation, new PropertyPath("UIElement.Opacity"));
-			sb.Children.Add(translationAnimation);
 			sb.Children.Add(fadeAnimation);
+
 			sb.Begin();
 		}
 
@@ -194,14 +199,46 @@ namespace Aecount
 			IncrementCount();
 		}
 
+		private Storyboard StoryboardForResetAnimations(double topDestinationY, double bottomDestinationY)
+		{
+			Storyboard sb = new Storyboard();
+
+			DoubleAnimation topAnimation = new DoubleAnimation();
+			topAnimation.From = TitleGrid.Height;
+			topAnimation.To = topDestinationY;
+			topAnimation.Duration = AnimationDuration;
+			Storyboard.SetTarget(topAnimation, TitleGrid);
+			Storyboard.SetTargetProperty(topAnimation, new PropertyPath("UIElement.Height"));
+			sb.Children.Add(topAnimation);
+
+			TranslateTransform transform = (TranslateTransform)GoalGrid.RenderTransform;
+			DoubleAnimation bottomAnimation = new DoubleAnimation();
+			bottomAnimation.From = transform.Y;
+			bottomAnimation.To = bottomDestinationY;
+			bottomAnimation.Duration = AnimationDuration;
+			Storyboard.SetTarget(bottomAnimation, GoalGrid);
+			Storyboard.SetTargetProperty(bottomAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
+			sb.Children.Add(bottomAnimation);
+
+			return sb;
+		}
+
 		private void ResetTopAndBottomGrid()
 		{
-			TitleGrid.Height = TitleGridHeight;
-			GoalGrid.Height = GoalGridHeight;
-			GoalGrid.Margin = GoalGridMargin;
+			Storyboard sb = StoryboardForResetAnimations(TitleGridHeight, 0);
+			sb.Begin();
 		}
 
 		private void ResetCounter()
+		{
+			double from = TitleGridHeight + (CounterGrid.ActualHeight / 2.0);
+			double to = -(CounterGrid.ActualHeight / 2.0);
+			Storyboard sb = StoryboardForResetAnimations(from, to);
+			sb.Completed += ResetCounterAnimation_Completed;
+			sb.Begin();
+		}
+
+		void ResetCounterAnimation_Completed(object sender, EventArgs e)
 		{
 			this.Count = 0;
 			CountText.Text = Count.ToString();
@@ -251,11 +288,10 @@ namespace Aecount
 			}
 
 			TitleGrid.Height = TitleGridHeight + y;
-
-			GoalGrid.Height = GoalGridHeight + y;
-			Thickness margin = GoalGrid.Margin;
-			margin.Top = GoalGridMargin.Top - y;
-			GoalGrid.Margin = margin;
+			
+			TranslateTransform transform = new TranslateTransform();
+			transform.Y = -y;
+			GoalGrid.RenderTransform = transform;
 		}
 
 		private void LayoutRoot_ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
