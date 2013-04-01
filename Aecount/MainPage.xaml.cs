@@ -62,11 +62,22 @@ namespace Aecount
 			}
 		}
 
+		private double TitleGridHeight;
+		private double GoalGridHeight;
+		private Thickness GoalGridMargin;
+
 		public MainPage()
 		{
 			InitializeComponent();
 
 			CountText.Text = Count.ToString();
+		}
+
+		private void PhoneApplicationPage_Loaded_1(object sender, RoutedEventArgs e)
+		{
+			TitleGridHeight = TitleGrid.ActualHeight;
+			GoalGridHeight = GoalGrid.ActualHeight;
+			GoalGridMargin = GoalGrid.Margin;
 		}
 
 		private void UpdateCountText(bool increment)
@@ -93,6 +104,20 @@ namespace Aecount
 			IncrementCount();
 		}
 
+		private void ResetTopAndBottomGrid()
+		{
+			TitleGrid.Height = TitleGridHeight;
+			GoalGrid.Height = GoalGridHeight;
+			GoalGrid.Margin = GoalGridMargin;
+		}
+
+		private void ResetCounter()
+		{
+			this.Count = 0;
+			CountText.Text = Count.ToString();
+			ResetTopAndBottomGrid();
+		}
+
 		private void CounterGrid_ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
 		{
 			ManipulationDelta delta = e.TotalManipulation;
@@ -105,6 +130,64 @@ namespace Aecount
 			else if (translation.X < -50.0)
 			{
 				IncrementCount();
+			}
+		}
+
+		private double YValueForManipulationDelta(ManipulationDelta delta)
+		{
+			double topY = (1.0 - delta.Scale.Y) * CounterGrid.ActualHeight;
+			return topY;
+		}
+
+		private double ZeroEpsilon = 0.000001;
+
+		private void LayoutRoot_ManipulationDelta(object sender, ManipulationDeltaEventArgs e)
+		{
+			ManipulationDelta delta = e.CumulativeManipulation;
+			double y = YValueForManipulationDelta(delta);
+
+			// FIXME: This margin may have to be adjusted. It doesn't quite reach the center.
+			if (y > (CounterGrid.ActualHeight / 2.0))
+			{
+				return;
+			}
+			else if (y < 0)
+			{
+				return;
+			}
+			else if (delta.Scale.X < ZeroEpsilon && delta.Scale.Y < ZeroEpsilon)
+			{
+				// Not a pinch event.
+				return;
+			}
+
+			TitleGrid.Height = TitleGridHeight + y;
+
+			GoalGrid.Height = GoalGridHeight + y;
+			Thickness margin = GoalGrid.Margin;
+			margin.Top = GoalGridMargin.Top - y;
+			GoalGrid.Margin = margin;
+		}
+
+		private void LayoutRoot_ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
+		{
+			ManipulationDelta delta = e.TotalManipulation;
+
+			if (delta.Scale.X < ZeroEpsilon && delta.Scale.Y < ZeroEpsilon)
+			{
+				// Not a pinch event.
+				return;
+			} 
+			
+			double y = YValueForManipulationDelta(delta);
+
+			if (y < 10.0)
+			{
+				ResetTopAndBottomGrid();
+			}
+			else
+			{
+				ResetCounter();
 			}
 		}
 	}
