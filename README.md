@@ -11,9 +11,19 @@ Implemented so far:
 - Increment/decrement animations.
 - Reset the count to 0 by pinching.
 - All values are saved to IsolatedStorageSettings.
+- Pinch animations.
 
-Still missing:
-- There should be an animation after pinching is completed.
+Things in the iOS version that are still missing in the Windows Phone version:
 - Visual representation of the goal.
+- Sounds.
 
-If you want to contact me, I'm @suprjohan on Twitter, and @jkh on App.net.
+Aecount uses the [Chunk](http://www.theleagueofmoveabletype.com/chunk) typeface by Meredith Mandel. I've included these directly in the repository. If this is a problem, please contact me.
+
+Links
+=====
+
+[Aero Deko](http://aerodeko.com)
+
+[Johan (@suprjohan) on Twitter](http://twitter.com/suprjohan)
+
+[Johan (@jkh) on App.net](http://alpha.app.net/jkh)
