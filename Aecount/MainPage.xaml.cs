@@ -86,15 +86,6 @@ namespace Aecount
 		public MainPage()
 		{
 			InitializeComponent();
-
-			bool appLaunched = SettingsHelper.GetBoolValueForKey(FirstLaunchKey);
-			if (!appLaunched)
-			{
-				Goal = 20;
-				SettingsHelper.SetValue(FirstLaunchKey, true);
-
-				// TODO: Show tutorial?
-			}
 		}
 
 		private void PhoneApplicationPage_Loaded_1(object sender, RoutedEventArgs e)
@@ -102,6 +93,13 @@ namespace Aecount
 			TitleGridHeight = TitleGrid.ActualHeight;
 			GoalGridHeight = GoalGrid.ActualHeight;
 			GoalGridMargin = GoalGrid.Margin;
+
+			bool appLaunched = SettingsHelper.GetBoolValueForKey(FirstLaunchKey);
+			if (!appLaunched)
+			{
+				Goal = 20;
+				SettingsHelper.SetValue(FirstLaunchKey, true);
+			}
 
 			CountText.Text = Count.ToString();
 			TitleBox.Text = CounterTitle;
