@@ -95,10 +95,6 @@ namespace Aecount
 
 				// TODO: Show tutorial?
 			}
-
-			CountText.Text = Count.ToString();
-			TitleBox.Text = CounterTitle;
-			GoalBox.Text = Goal.ToString();
 		}
 
 		private void PhoneApplicationPage_Loaded_1(object sender, RoutedEventArgs e)
@@ -106,6 +102,10 @@ namespace Aecount
 			TitleGridHeight = TitleGrid.ActualHeight;
 			GoalGridHeight = GoalGrid.ActualHeight;
 			GoalGridMargin = GoalGrid.Margin;
+
+			CountText.Text = Count.ToString();
+			TitleBox.Text = CounterTitle;
+			GoalBox.Text = Goal.ToString();
 
 			UpdateGoalIndicator(false);
 
