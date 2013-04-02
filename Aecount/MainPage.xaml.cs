@@ -261,6 +261,8 @@ namespace Aecount
 
 		private void ResetTopAndBottomGrid()
 		{
+			UpdateGoalIndicator(true);
+
 			Storyboard sb = StoryboardForResetAnimations(TitleGridHeight, 0);
 			sb.Begin();
 		}
