@@ -47,7 +47,7 @@ namespace Aecount
 			}
 		}
 
-		private string Title
+		private string CounterTitle
 		{
 			get
 			{
@@ -55,7 +55,7 @@ namespace Aecount
 				if (title == null)
 				{
 					string defaultTitle = "Counter";
-					Title = defaultTitle;
+					CounterTitle = defaultTitle;
 					return defaultTitle;
 				}
 
@@ -95,7 +95,7 @@ namespace Aecount
 			InitializeComponent();
 
 			CountText.Text = Count.ToString();
-			TitleBox.Text = Title;
+			TitleBox.Text = CounterTitle;
 			GoalBox.Text = Goal.ToString();
 		}
 
@@ -336,8 +336,8 @@ namespace Aecount
 			{
 				// Not a pinch event.
 				return;
-			} 
-			
+			}
+
 			double y = YValueForManipulationDelta(delta);
 
 			if (y < 10.0)
@@ -352,7 +352,7 @@ namespace Aecount
 
 		private void TitleBox_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			Title = TitleBox.Text;
+			CounterTitle = TitleBox.Text;
 		}
 
 		private void GoalBox_TextChanged(object sender, TextChangedEventArgs e)
