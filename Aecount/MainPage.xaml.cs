@@ -20,13 +20,14 @@ namespace Aecount
 		private string CountKey = "count";
 		private string TitleKey = "title";
 		private string GoalKey = "goal";
+		private string FirstLaunchKey = "firstLaunch";
 		private double ZeroEpsilon = 0.000001;
 		private double TitleGridHeight;
 		private double GoalGridHeight;
+		private double CountAnimationX = 30.0;
 		private Thickness GoalGridMargin;
 		private TimeSpan AnimationDuration = TimeSpan.FromMilliseconds(200);
 		private TimeSpan FastAnimationDuration = TimeSpan.FromMilliseconds(75);
-		private double CountAnimationX = 30.0;
 
 		private int Count
 		{
@@ -73,14 +74,6 @@ namespace Aecount
 			get
 			{
 				int goal = SettingsHelper.GetIntegerValueForKey(GoalKey);
-				if (goal == 0)
-				{
-					// FIXME: This should be set on first launch, not when the helper returns 0.
-					int defaultGoal = 20;
-					Goal = defaultGoal;
-					return defaultGoal;
-				}
-
 				return goal;
 			}
 
@@ -93,6 +86,15 @@ namespace Aecount
 		public MainPage()
 		{
 			InitializeComponent();
+
+			bool appLaunched = SettingsHelper.GetBoolValueForKey(FirstLaunchKey);
+			if (!appLaunched)
+			{
+				Goal = 20;
+				SettingsHelper.SetValue(FirstLaunchKey, true);
+
+				// TODO: Show tutorial?
+			}
 
 			CountText.Text = Count.ToString();
 			TitleBox.Text = CounterTitle;

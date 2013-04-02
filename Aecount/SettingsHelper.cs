@@ -50,18 +50,26 @@ namespace Aecount
 
 		public static int GetIntegerValueForKey(string key)
 		{
-			IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
+			object value = GetValueForKey(key);
 
-			try
+			if (value == null)
 			{
-				object value = settings[key];
-				return Convert.ToInt32(value);
-			}
-			catch (Exception ex)
-			{
-				Debug.WriteLine(ex.Message);
 				return 0;
 			}
+
+			return Convert.ToInt32(value);
+		}
+
+		public static bool GetBoolValueForKey(string key)
+		{
+			object value = GetValueForKey(key);
+
+			if (value == null)
+			{
+				return false;
+			}
+
+			return Convert.ToBoolean(value);
 		}
 	}
 }
