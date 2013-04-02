@@ -22,6 +22,7 @@
 
 		<!-- Counter -->
 		<Grid x:Name="CounterGrid" HorizontalAlignment="Left" Height="256" Grid.RowSpan="2" VerticalAlignment="Top" Width="480" Margin="0,256,0,0" Tap="Grid_Tap_1" ManipulationCompleted="CounterGrid_ManipulationCompleted">
+			<Rectangle x:Name="GoalRectangle" Fill="{StaticResource PhoneInactiveBrush}" Width="0" HorizontalAlignment="Left" />
 			<TextBlock x:Name="CountText" HorizontalAlignment="Center" Margin="40,37" TextWrapping="Wrap" Text="0" VerticalAlignment="Center" Width="400" Height="182" FontSize="200" TextAlignment="Center" FontWeight="Bold" FontFamily="{StaticResource ChunkFive}" LineHeight="72"/>
 		</Grid>
 

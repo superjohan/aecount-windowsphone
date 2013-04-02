@@ -100,8 +100,35 @@ namespace Aecount
 			GoalGridHeight = GoalGrid.ActualHeight;
 			GoalGridMargin = GoalGrid.Margin;
 
+			UpdateGoalIndicator(false);
+
 			// I fucking *hate* the Windows Phone animation system.
 			CountText.RenderTransform = new TranslateTransform();
+		}
+
+		private void UpdateGoalIndicator(bool animated)
+		{
+			double ratio = (double)Count / (double)Goal;
+			double width = ratio * CounterGrid.ActualWidth;
+
+			if (!animated)
+			{
+				GoalRectangle.Width = width;
+			}
+			else
+			{
+				Storyboard sb = new Storyboard();
+
+				DoubleAnimation animation = new DoubleAnimation();
+				animation.Duration = AnimationDuration;
+				animation.From = GoalRectangle.Width;
+				animation.To = width;
+				Storyboard.SetTarget(animation, GoalRectangle);
+				Storyboard.SetTargetProperty(animation, new PropertyPath("UIElement.Width"));
+				sb.Children.Add(animation);
+
+				sb.Begin();
+			}
 		}
 
 		private void AnimateCountOut(bool leftDirection)
@@ -186,12 +213,14 @@ namespace Aecount
 		{
 			this.Count--;
 			UpdateCountText(false);
+			UpdateGoalIndicator(true);
 		}
 
 		private void IncrementCount()
 		{
 			this.Count++;
 			UpdateCountText(true);
+			UpdateGoalIndicator(true);
 		}
 
 		private void Grid_Tap_1(object sender, GestureEventArgs e)
@@ -324,6 +353,7 @@ namespace Aecount
 		private void GoalBox_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			Goal = Convert.ToInt32(GoalBox.Text);
+			UpdateGoalIndicator(true);
 		}
 
 		private void GoalBox_KeyUp(object sender, KeyEventArgs e)
