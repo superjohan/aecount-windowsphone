@@ -38,6 +38,11 @@ namespace Aecount
 
 			set
 			{
+				if (value < 0)
+				{
+					return;
+				}
+
 				SettingsHelper.SetValue(CountKey, value);
 			}
 		}
