@@ -334,7 +334,7 @@ namespace Aecount
 		{
 			ManipulationDelta delta = e.TotalManipulation;
 
-			if (delta.Scale.X < ZeroEpsilon && delta.Scale.Y < ZeroEpsilon)
+			if (delta.Scale.X < ZeroEpsilon && delta.Scale.Y < ZeroEpsilon && delta.Scale.X > -ZeroEpsilon && delta.Scale.Y > -ZeroEpsilon)
 			{
 				// Not a pinch event.
 				return;
