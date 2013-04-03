@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.1">
   <App xmlns="" ProductID="{12a688dc-f07c-417a-a0e2-66b9cddf488a}" Title="Aecount" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Aero Deko" Description="Aecount is a simple, gesture-based counter." Publisher="Aecount" BitsPerPixel="32">
-    <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
+    <IconPath IsRelative="true" IsResource="false">Medium.png</IconPath>
     <Capabilities>
     </Capabilities>
     <Tasks>
@@ -10,9 +10,10 @@
     <Tokens>
       <PrimaryToken TokenID="AecountToken" TaskName="_default">
         <TemplateType5>
-          <BackgroundImageURI IsRelative="true" IsResource="false">Background.png</BackgroundImageURI>
+          <BackgroundImageURI IsRelative="true" IsResource="false">Medium.png</BackgroundImageURI>
           <Count>0</Count>
-          <Title>Aecount</Title>
+          <Title>
+          </Title>
         </TemplateType5>
       </PrimaryToken>
     </Tokens>
