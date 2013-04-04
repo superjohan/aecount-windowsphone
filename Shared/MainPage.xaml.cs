@@ -113,7 +113,13 @@ namespace Aecount
 
 		private void UpdateGoalIndicator(bool animated)
 		{
-			double ratio = (double)Count / (double)Goal;
+			int goal = Goal;
+			double ratio = 0;
+			if (goal > 0)
+			{
+				ratio = (double)Count / (double)Goal;
+			}
+
 			double width = ratio * CounterGrid.ActualWidth;
 
 			if (!animated)
