@@ -15,8 +15,15 @@ namespace Aecount
 
 			try
 			{
-				object value = settings[key];
-				return value;
+				if (settings.Contains(key))
+				{
+					object value = settings[key];
+					return value;
+				}
+				else
+				{
+					return null;
+				}
 			}
 			catch (Exception ex)
 			{
