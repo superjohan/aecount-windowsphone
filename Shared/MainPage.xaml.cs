@@ -365,7 +365,18 @@ namespace Aecount
 
 		private void GoalBox_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			Goal = Convert.ToInt32(GoalBox.Text);
+			try
+			{
+				Goal = Convert.ToInt32(GoalBox.Text);
+			}
+			catch (Exception ex)
+			{
+				// The value is invalid, so let's go with zero.
+				Debug.WriteLine(ex.Message);
+				Goal = 0;
+				GoalBox.Text = Goal.ToString();
+			}
+
 			UpdateGoalIndicator(true);
 		}
 
