@@ -9,9 +9,9 @@ using System.Resources;
 [assembly: AssemblyTitle("Aecount")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Aero Deko")]
 [assembly: AssemblyProduct("Aecount")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCopyright("Copyright © Aero Deko 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
