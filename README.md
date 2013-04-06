@@ -19,6 +19,10 @@ Things in the iOS version that are still missing in the Windows Phone version:
 
 Aecount uses the [Chunk](http://www.theleagueofmoveabletype.com/chunk) typeface by Meredith Mandel. I've included it directly in the repository. If this is a problem, please contact me.
 
+Oh, and this is what the app looks like:
+
+![Aecount WP8 screenshot](http://static.squarespace.com/static/51321d7fe4b027b1c04f5d6e/t/515bebf3e4b065d6376710c5/1364978676587/Aecount%20WP%20site%20pic%20no%20bg.png)
+
 Links
 =====
 
