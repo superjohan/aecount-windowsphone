@@ -26,6 +26,8 @@ Oh, and this is what the app looks like:
 Links
 =====
 
+[Aecount on the Windows Phone Store](http://www.windowsphone.com/en-us/store/app/aecount/53c17d64-5c49-4d08-af7b-79b5e7f411e0)
+
 [Aero Deko](http://aerodeko.com)
 
 [Johan (@suprjohan) on Twitter](http://twitter.com/suprjohan)
