@@ -292,12 +292,12 @@ namespace Aecount
 			ManipulationDelta delta = e.TotalManipulation;
 			Point translation = delta.Translation;
 
-			// FIXME: Replace magic numbers with something sensible.
-			if (translation.X > 50.0)
+			double threshold = 50.0; // value determined by the Stetson-Harrison method.
+			if (translation.X > threshold)
 			{
 				DecrementCount();
 			}
-			else if (translation.X < -50.0)
+			else if (translation.X < -threshold)
 			{
 				IncrementCount();
 			}
